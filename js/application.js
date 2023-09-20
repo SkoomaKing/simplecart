@@ -47,12 +47,30 @@ var removeItem = function () {
 var addItem = function () {
   var newItemName = $('.add-item-name').val();
   var newItemPrice = parseFloat($('.add-item-price').val()).toFixed(2);
-  $('tbody > tr:last-child').after("<tr><td class='item-name'>" + newItemName + "</td>" + 
-    "<td class='item-price'>" + newItemPrice + "</td>" +
-    "<td class='item-quantity'><input type='number' min='0' value='1' /></td>" +
-    "<td class='item-total'></td>" + 
-    "<td class='item-remove'><button class='btn'><i class='fas fa-trash'></i></button></td></tr>"
-   );
+  
+  // check to see if new item name or quantity are empty/invalid
+  if (!newItemName || isNaN(newItemPrice)) {
+    alert("Ensure new item name is not empty and price is a number.");
+    return false;
+  }
+
+  // check to see if cart is empty
+  if ($('#cart > tbody > tr').length == 0) {
+    $('tbody').append("<tr><td class='item-name'>" + newItemName + "</td>" + 
+      "<td class='item-price'>" + newItemPrice + "</td>" +
+      "<td class='item-quantity'><input type='number' min='0' value='1' oninput='this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null' /></td>" +
+      "<td class='item-total'></td>" + 
+      "<td class='item-remove'><button class='btn'><i class='fas fa-trash'></i></button></td></tr>"
+    );
+  }
+  else {
+    $('tbody > tr:last-child').after("<tr><td class='item-name'>" + newItemName + "</td>" + 
+      "<td class='item-price'>" + newItemPrice + "</td>" +
+      "<td class='item-quantity'><input type='number' min='0' value='1' oninput='this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null' /></td>" +
+      "<td class='item-total'></td>" + 
+      "<td class='item-remove'><button class='btn'><i class='fas fa-trash'></i></button></td></tr>"
+    );
+  }
   calcCosts();
 }
 
